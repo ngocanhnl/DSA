@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct node{
+    int val;
+    node* right;
+    node* left;
+    node(int x){
+        val = x;
+        left = right = NULL;
+    }
+};
+
+
+void makeRoot(node* root, int v, char c){
+    if(c=='L') root->left = new node(v);
+    else root->right = new node(v);
+}
+
+void insertNode(node* root, int u, int v, char c){
+    if(root == NULL) return;
+    if(root->val == u){
+        makeRoot(root,v,c);
+    }
+    else{
+        insertNode(root->left,u,v,c);
+        insertNode(root->right,u,v,c);
+    }
+}
+
+void spiralorder(node *root){
+    stack<node*> s1,s2;
+    s1.push(root);
+    while(!s1.empty()||!s2.empty()){
+        while(!s1.empty()){
+            node *top = s1.top(); s1.pop();
+            cout<<top->val<<' ';
+            if(top->right!=NULL) s2.push(top->right);
+            if(top->left!=NULL) s2.push(top->left);
+        }
+        while(!s2.empty()){
+            node *top = s2.top(); s2.pop();
+            cout<<top->val<<' ';
+            if(top->left!=NULL) s1.push(top->left);
+            if(top->right!=NULL) s1.push(top->right);
+        }
+    }
+}
+
+
+int main(){
+    int n; cin >> n;
+    node *root = NULL;
+    while(n--){
+        int a, b; char c;
+        cin >> a >> b >> c;
+        if(root == NULL){
+            root = new node(a);
+            makeRoot(root,b,c);
+        }
+        else{
+            insertNode(root,a,b,c);
+        }
+    }
+    spiralorder(root);
+}
